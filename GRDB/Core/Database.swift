@@ -457,7 +457,7 @@ public final class Database: CustomStringConvertible, CustomDebugStringConvertib
     /// This method must be called after database initialization
     func setUp() throws {
         setupBusyMode()
-        setupDoubleQuotedStringLiterals()
+        // setupDoubleQuotedStringLiterals()
         try setupForeignKeys()
         setupDefaultFunctions()
         setupDefaultCollations()
@@ -511,13 +511,13 @@ public final class Database: CustomStringConvertible, CustomDebugStringConvertib
         }
     }
     
-    private func setupDoubleQuotedStringLiterals() {
-        if configuration.acceptsDoubleQuotedStringLiterals {
-            _enableDoubleQuotedStringLiterals(sqliteConnection)
-        } else {
-            _disableDoubleQuotedStringLiterals(sqliteConnection)
-        }
-    }
+//    private func setupDoubleQuotedStringLiterals() {
+//        if configuration.acceptsDoubleQuotedStringLiterals {
+//            _enableDoubleQuotedStringLiterals(sqliteConnection)
+//        } else {
+//            _disableDoubleQuotedStringLiterals(sqliteConnection)
+//        }
+//    }
     
     private func setupForeignKeys() throws {
         // Foreign keys are disabled by default with SQLite3

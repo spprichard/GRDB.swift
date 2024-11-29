@@ -6,6 +6,9 @@ import PackageDescription
 
 var swiftSettings: [SwiftSetting] = [
     .define("SQLITE_ENABLE_FTS5"),
+    .define("SQLITE_DBCONFIG_ENABLE_LOAD_EXTENSION"),
+    //.define("GRDBCUSTOMSQLITE"),
+    .interoperabilityMode(.Cxx),
 ]
 var cSettings: [CSetting] = []
 var dependencies: [PackageDescription.Package.Dependency] = []
@@ -29,7 +32,8 @@ if ProcessInfo.processInfo.environment["SPI_BUILDER"] == "1" {
 
 let package = Package(
     name: "GRDB",
-    defaultLocalization: "en", // for tests
+    defaultLocalization: "en",
+    // for tests
     platforms: [
         .iOS(.v13),
         .macOS(.v10_15),
@@ -37,22 +41,32 @@ let package = Package(
         .watchOS(.v7),
     ],
     products: [
-        .library(name: "GRDBSQLite", targets: ["GRDBSQLite"]),
-        .library(name: "GRDB", targets: ["GRDB"]),
-        .library(name: "GRDB-dynamic", type: .dynamic, targets: ["GRDB"]),
+        .library(
+            name: "GRDBSQLite",
+            targets: ["GRDBSQLite"]
+        ),
+        .library(
+            name: "GRDB",
+            targets: ["GRDB"]
+        ),
+//        .library(name: "GRDB-dynamic", type: .dynamic, targets: ["GRDB"]),
     ],
     dependencies: dependencies,
     targets: [
-        .systemLibrary(
+        .target(
             name: "GRDBSQLite",
-            providers: [.apt(["libsqlite3-dev"])]),
+            swiftSettings: swiftSettings
+        ),
         .target(
             name: "GRDB",
-            dependencies: ["GRDBSQLite"],
+            dependencies: [
+                "GRDBSQLite"
+            ],
             path: "GRDB",
             resources: [.copy("PrivacyInfo.xcprivacy")],
             cSettings: cSettings,
-            swiftSettings: swiftSettings),
+            swiftSettings: swiftSettings
+        ),
         .testTarget(
             name: "GRDBTests",
             dependencies: ["GRDB"],
